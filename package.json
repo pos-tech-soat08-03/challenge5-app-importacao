@@ -1,0 +1,46 @@
+{
+  "name": "challenge5-app-status",
+  "version": "1.0.0",
+  "description": "Aplicação Tech Challenge 5 (Hackaton) POSTECH SOAT8 FIAP - Serviço de Status",
+  "main": "src/app.ts",
+  "scripts": {
+    "test": "jest --testLocationInResults --colors",
+    "test-coverage": "jest --testLocationInResults --coverage=true --reporters=default --colors --verbose ./test",
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "start:dev": "npm install --save-dev; CHOKIDAR_USEPOLLING=true dotenv -- tsnd --transpile-only --respawn --ignore-watch node_modules src/app.ts",
+    "sonar:dev": "node sonar-config.js",
+    "swagger-gen": "node src/swagger.ts"
+  },
+  "keywords": [],
+  "author": "Grupo 3 SOAT8",
+  "license": "MIT",
+  "dependencies": {
+    "@types/jest": "^29.5.13",
+    "axios": "^1.8.4",
+    "dotenv-cli": "^7.4.1",
+    "express": "^4.19.2",
+    "jest": "^29.7.0",
+    "mysql2": "^3.14.0",
+    "ts-jest": "^29.2.5",
+    "uuidv4": "^6.2.13"
+  },
+  "devDependencies": {
+    "@sonar/scan": "^4.3.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.7.4",
+    "@types/swagger-ui-express": "^4.1.6",
+    "jest-sonar-reporter": "^2.0.0",
+    "nodemon": "^3.1.7",
+    "sequelize": "^6.37.6",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.6.2"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  }
+}
