@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: svc-challenge5-app-status-database
+  name: svc-challenge5-app-importacao-database
 spec:
   type: ClusterIP
   selector:
-    app: challenge5-app-status-database
+    app: challenge5-app-importacao-database
   ports:
   - port: 3306
