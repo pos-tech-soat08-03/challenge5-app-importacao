@@ -14,4 +14,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["node", "/app/dist/app.js"]
+CMD ["node", "/app/dist/src/app.js"]

@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Microserviço de Status v1.0 - Documentação da API.",
-    "description": "Challenge5 SOAT8 Grupo 03 - Microserviço de Status e Reprocessamento",
+    "title": "Microserviço de Importacao e Processamento  v1.0 - Documentação da API.",
+    "description": "Challenge5 SOAT8 Grupo 03 - Microserviço de Importacao e Processamento",
     "version": "1.0.0"
   },
   "servers": [

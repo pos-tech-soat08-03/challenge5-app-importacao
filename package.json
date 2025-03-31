@@ -1,7 +1,7 @@
 {
-  "name": "challenge5-app-status",
+  "name": "challenge5-app-importacao-processamento",
   "version": "1.0.0",
-  "description": "Aplicação Tech Challenge 5 (Hackaton) POSTECH SOAT8 FIAP - Serviço de Status",
+  "description": "Aplicação Tech Challenge 5 (Hackaton) POSTECH SOAT8 FIAP - Serviço de Importacao e Processamento dos Videos",
   "main": "src/app.ts",
   "scripts": {
     "test": "jest --testLocationInResults --colors",
@@ -17,6 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "@types/jest": "^29.5.13",
+    "aws-sdk": "^2.1692.0",
     "axios": "^1.8.4",
     "dotenv-cli": "^7.4.1",
     "express": "^4.19.2",

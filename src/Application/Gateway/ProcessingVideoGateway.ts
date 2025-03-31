@@ -49,7 +49,7 @@ export class VideoProcessingGateway {
                 importData.setImportStatus(ProcessingStatusEnum.IN_PROGRESS);
                 importData.setImportStatusPercentage(50);
                 await this.importGateway.setVideoImportStatus(importData);
-                await this.postImportStatus(importData);
+                await this.ProcessingImportGateway(importData);
                 
                 
                 await this.simulateProcessing(importData);
@@ -58,14 +58,14 @@ export class VideoProcessingGateway {
                 importData.setImportStatus(ProcessingStatusEnum.COMPLETED);
                 importData.setImportStatusPercentage(100);
                 await this.importGateway.setVideoImportStatus(importData);
-                await this.postImportStatus(importData);
+                await this.ProcessingImportGateway(importData);
 
                 console.log(`Importação ${importData.getImportId()} concluída.`);
             } catch (error) {
                 console.error(`Erro ao processar importação ${importData.getImportId()}:`, error);
                 importData.setImportStatus(ProcessingStatusEnum.FAILED);
                 await this.importGateway.setVideoImportStatus(importData);
-                await this.postImportStatus(importData);
+                await this.ProcessingImportGateway(importData);
             }
         }
     }
@@ -74,7 +74,7 @@ export class VideoProcessingGateway {
         await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulação de tempo de processamento
     }
 
-    private async postImportStatus(importData: VideoImportEntity): Promise<void> {
+    private async ProcessingImportGateway(importData: VideoImportEntity): Promise<void> {
         try {
             await axios.post(this.statusEndpoint, {
                 importId: importData.getImportId(),

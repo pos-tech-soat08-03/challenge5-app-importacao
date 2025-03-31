@@ -3,7 +3,7 @@ const swaggerAutogen = require('swagger-autogen')({ language: 'pt-BR', openapi: 
 const doc = {
   info: {
     title: 'Microserviço de Status v1.0 - Documentação da API.',
-    description: 'Challenge5 SOAT8 Grupo 03 - Microserviço de Status e Reprocessamento'
+    description: 'Challenge5 SOAT8 Grupo 03 - Microserviço de Importação e Processamento de Vídeos',
   },
 
   schemes: ['http'],

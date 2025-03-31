@@ -1,5 +1,7 @@
-import { ProcessingStatusInterface } from "../Interfaces/Gateway/ProcessingStatusInterface";
+import { VideoProcessingGateway } from "../../Application/Gateway/ProcessingVideoGateway";
+
+
 
 export type Gateways = {
-  processingStatusGateway: ProcessingStatusInterface;
+  processingImportGateway: VideoProcessingGateway;
 };
