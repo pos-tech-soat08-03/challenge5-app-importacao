@@ -15,7 +15,7 @@ class VideoProcessingModel extends Model {
     public updatedAt!: Date;
 }
 
-export class VideoProcessingGateway {
+export class ProcessingImportGateway {
     private readonly sequelize: Sequelize;
     private readonly statusEndpoint: string = "http://outro-servico/status";
     private readonly importGateway: VideoImportInterface;
@@ -34,6 +34,8 @@ export class VideoProcessingGateway {
                 port: this.dbconnection.portnumb,
                 dialect: this.dbconnection.databaseType,
             }
+
+
         );
 
         this.importGateway = importGateway;
