@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "dependencies": {
+    "aws-sdk": "^2.1692.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.3"
+  }
+}
