@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-
 export class VideoEntity {
 
     private readonly id: string;
@@ -27,7 +26,7 @@ export class VideoEntity {
         if (!id) {
             id = uuidv4();
         }
-        this.id = id;
+        this.id = id ?? uuidv4();
     }
 
     public getId(): string {

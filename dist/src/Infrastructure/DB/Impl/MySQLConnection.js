@@ -3,9 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MySQLConnection = void 0;
 const ProcessingVideoGateway_1 = require("../../../Application/Gateway/ProcessingVideoGateway");
 class MySQLConnection {
-    gateways;
-    dbConnection;
-    sequelize;
     constructor(dbConnection, sequelizeInstance, videoImportGateway) {
         this.dbConnection = dbConnection;
         this.sequelize = sequelizeInstance;

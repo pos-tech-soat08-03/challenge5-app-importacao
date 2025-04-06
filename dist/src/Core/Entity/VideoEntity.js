@@ -3,16 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.VideoEntity = void 0;
 const uuid_1 = require("uuid");
 class VideoEntity {
-    id;
-    titulo;
-    descricao;
-    fileName;
-    fileExtension;
-    path;
-    fileSize;
-    encoding;
-    duration; // in seconds
-    fps;
     constructor(titulo, descricao, fileName, fileExtension, path, fileSize, encoding, duration, fps, id) {
         this.titulo = titulo;
         this.descricao = descricao;
@@ -26,7 +16,7 @@ class VideoEntity {
         if (!id) {
             id = (0, uuid_1.v4)();
         }
-        this.id = id;
+        this.id = id !== null && id !== void 0 ? id : (0, uuid_1.v4)();
     }
     getId() {
         return this.id;
