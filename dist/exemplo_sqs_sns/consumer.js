@@ -1,5 +1,10 @@
-import AWS from 'aws-sdk';
-const sqs = new AWS.SQS({
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const aws_sdk_1 = __importDefault(require("aws-sdk"));
+const sqs = new aws_sdk_1.default.SQS({
     endpoint: 'http://localhost:4566',
     region: 'us-east-1',
     accessKeyId: 'test',

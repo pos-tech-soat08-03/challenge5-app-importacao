@@ -2,9 +2,12 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./",
-    "target": "es2022",
-    "module": "nodenext",
-    "moduleResolution": "node16",
+    "target": "es2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "types": [
+      "node"
+    ],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,

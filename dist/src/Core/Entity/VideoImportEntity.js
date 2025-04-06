@@ -2,15 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VideoImportEntity = void 0;
 class VideoImportEntity {
-    videoId;
-    userId;
-    importStatus;
-    importStatusPercentage;
-    importLog;
-    createdAt;
-    updatedAt;
-    finishedAt;
-    importId;
     constructor(videoId, userId, importStatus, importStatusPercentage, importLog, createdAt, updatedAt, finishedAt, importId) {
         this.videoId = videoId;
         this.userId = userId;

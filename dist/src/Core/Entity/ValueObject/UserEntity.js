@@ -2,11 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userEntity = void 0;
 class userEntity {
-    userId;
-    email;
-    firstName;
-    lastName;
-    authToken;
     constructor(userId, email, firstName, lastName, authToken) {
         this.userId = userId;
         this.email = email;

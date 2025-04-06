@@ -8,19 +8,11 @@ const sequelize_1 = require("sequelize");
 const ProcessingStatusEnum_1 = require("../../Core/Entity/ValueObject/ProcessingStatusEnum");
 const axios_1 = __importDefault(require("axios"));
 class VideoProcessingModel extends sequelize_1.Model {
-    importId;
-    importStatus;
-    importStatusPercentage;
-    videoId;
-    userId;
 }
 class VideoProcessingGateway {
-    dbconnection;
-    sequelize;
-    statusEndpoint = "http://outro-servico/status";
-    importGateway;
     constructor(dbconnection, sequelize, importGateway) {
         this.dbconnection = dbconnection;
+        this.statusEndpoint = "http://outro-servico/status";
         this.sequelize = new sequelize_1.Sequelize(this.dbconnection.database, this.dbconnection.username, this.dbconnection.password, {
             host: this.dbconnection.hostname,
             port: this.dbconnection.portnumb,

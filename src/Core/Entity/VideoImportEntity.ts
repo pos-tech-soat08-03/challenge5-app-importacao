@@ -2,6 +2,9 @@ import { ProcessingStatusEnum } from "./ValueObject/ProcessingStatusEnum";
 
 
 export class VideoImportEntity {
+    getStatus() {
+        throw new Error("Method not implemented.");
+    }
     constructor(
         private videoId: string,
         private userId: string,

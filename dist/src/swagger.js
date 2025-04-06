@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const swaggerAutogen = require('swagger-autogen')({ language: 'pt-BR', openapi: '3.0.0' });
 const doc = {
     info: {
