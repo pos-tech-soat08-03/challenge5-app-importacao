@@ -1,18 +1,13 @@
-import { SNS } from "aws-sdk";
+import { PublishCommand } from "@aws-sdk/client-sns";
+import { SNSClientProvider } from "./SNSClientProvider";
 import { VideoEventPublisherInterface } from "../../Core/Interfaces/Gateway/VideoEventPublisherInterface";
 import { VideoImportEntity } from "../../Core/Entity/VideoImportEntity";
 
 export class SnsVideoPublisher implements VideoEventPublisherInterface {
-  private sns: SNS;
+  private readonly client = SNSClientProvider.getClient();
   private topicArn: string;
 
   constructor(topicArn: string) {
-    this.sns = new SNS({
-      region: process.env.AWS_REGION ?? "us-east-1",
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    });
-
     this.topicArn = topicArn;
   }
 
@@ -21,16 +16,16 @@ export class SnsVideoPublisher implements VideoEventPublisherInterface {
       importId: videoImport.getImportId(),
       videoId: videoImport.getVideoId(),
       userId: videoImport.getUserId(),
-      status: videoImport.getStatus(),
+      status: videoImport.getImportStatus(),
       createdAt: videoImport.getCreatedAt().toISOString(),
     };
 
-    const params = {
-      Message: JSON.stringify(message),
+    const command = new PublishCommand({
       TopicArn: this.topicArn,
-    };
+      Message: JSON.stringify(message),
+    });
 
-    await this.sns.publish(params).promise();
+    await this.client.send(command);
     console.log("[SNS] Evento publicado com sucesso:", message);
   }
 }

@@ -1,4 +1,4 @@
-import { S3 } from "aws-sdk";
+import { S3Client, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import ffmpeg from "fluent-ffmpeg";
 import ffmpegPath from "@ffmpeg-installer/ffmpeg";
 import ffprobePath from "@ffprobe-installer/ffprobe";
@@ -54,14 +54,17 @@ function validateVideoDuration(filePath: string): Promise<void> {
 }
 
 async function checkS3BucketCapacity(fileSizeMB: number): Promise<void> {
-  const s3 = new S3({
+  const s3 = new S3Client({
     region: process.env.AWS_REGION,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+    },
   });
 
   const bucket = process.env.S3_BUCKET_NAME!;
-  const usageData = await s3.listObjectsV2({ Bucket: bucket }).promise();
+  const command = new ListObjectsV2Command({ Bucket: bucket });
+  const usageData = await s3.send(command);
 
   const totalSize = usageData.Contents?.reduce((acc, obj) => acc + (obj.Size ?? 0), 0) ?? 0;
   const totalSizeMB = totalSize / (1024 * 1024);

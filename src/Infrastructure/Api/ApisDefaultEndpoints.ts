@@ -1,6 +1,7 @@
 import { Express } from "express";
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "../../swagger-output.json";
+import { SnsVideoPublisher } from "../SQS_SNS/SnsVideoPublisher";
 
 export class DefaultApiEndpoints {
   
