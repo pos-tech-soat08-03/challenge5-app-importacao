@@ -3,10 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProcessingConfigEntity = void 0;
 const uuid_1 = require("uuid");
 class ProcessingConfigEntity {
-    id;
-    outputFormat;
-    resolution;
-    interval;
     constructor(outputFormat, resolution, interval, id) {
         this.outputFormat = outputFormat;
         this.resolution = resolution;
