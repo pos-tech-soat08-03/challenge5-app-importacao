@@ -1,31 +1,27 @@
-import { PublishCommand } from "@aws-sdk/client-sns";
-import { SNSClientProvider } from "./SNSClientProvider";
-import { VideoEventPublisherInterface } from "../../Core/Interfaces/Gateway/VideoEventPublisherInterface";
-import { VideoImportEntity } from "../../Core/Entity/VideoImportEntity";
+import { SNSClient, PublishCommand } from "@aws-sdk/client-sns";
 
-export class SnsVideoPublisher implements VideoEventPublisherInterface {
-  private readonly client = SNSClientProvider.getClient();
+export class SnsVideoPublisher {
+  private sns: SNSClient;
   private topicArn: string;
 
   constructor(topicArn: string) {
     this.topicArn = topicArn;
+    this.sns = new SNSClient({
+      region: process.env.AWS_REGION,
+      endpoint: "http://localstack:4566", // <--- IMPORTANTE: aponta para o container localstack
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+      },
+    });
   }
 
-  async publish(videoImport: VideoImportEntity): Promise<void> {
-    const message = {
-      importId: videoImport.getImportId(),
-      videoId: videoImport.getVideoId(),
-      userId: videoImport.getUserId(),
-      status: videoImport.getImportStatus(),
-      createdAt: videoImport.getCreatedAt().toISOString(),
-    };
-
+  async publish(message: any) {
     const command = new PublishCommand({
       TopicArn: this.topicArn,
       Message: JSON.stringify(message),
     });
 
-    await this.client.send(command);
-    console.log("[SNS] Evento publicado com sucesso:", message);
+    return this.sns.send(command);
   }
 }

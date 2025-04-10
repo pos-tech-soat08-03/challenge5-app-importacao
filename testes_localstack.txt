@@ -1,0 +1,95 @@
+PRÉ-REQUISITOS:
+LocalStack em execução com suporte a sns, sqs.
+
+Docker rodando normalmente.
+
+Seu microserviço de importação deve estar escutando uma fila SQS e processando a mensagem.
+
+O tópico canal-de-processamento e as filas sns-canal-de-processamento e sns-dlq-canal-de-processamento devem ser criadas no LocalStack.
+
+O microserviço de importação deve estar configurado para ler as mensagens da fila sns-canal-de-processamento.
+
+Etapas:
+
+1. Subir LocalStack com SNS e SQS ativados:
+
+docker-compose up -d
+
+2. Criar tópico SNS
+
+docker exec -it localstack awslocal sns create-topic --name canal-de-processamento
+
+Anote o TopicArn retornado. Ex:
+arn:aws:sns:us-east-1:000000000000:canal-de-processamento
+
+3. Criar a fila SQS principal
+
+docker exec -it localstack awslocal sqs create-queue --queue-name sns-canal-de-processamento
+
+
+4. Criar a fila DLQ (fila de falhas)
+
+docker exec -it localstack awslocal sqs create-queue --queue-name sns-dlq-canal-de-processamento
+
+5. Obter os ARNs das filas
+
+docker exec -it localstack awslocal sqs get-queue-attributes --queue-url http://localhost:4566/000000000000/sns-canal-de-processamento --attribute-name QueueArn
+
+"QueueArn": "arn:aws:sqs:us-east-1:000000000000:sns-canal-de-processamento"
+
+Para a DLQ:
+
+docker exec -it localstack awslocal sqs get-queue-attributes  --queue-url http://localhost:4566/000000000000/sns-dlq-canal-de-processamento  --attribute-name QueueArn
+
+"QueueArn": "arn:aws:sqs:us-east-1:000000000000:sns-dlq-canal-de-processamento"
+
+Salve os dois ARNs.
+
+6. Adicionar permissão do SNS para enviar mensagens à fila
+
+Substitua os ARNs abaixo pelos que você obteve no passo anterior:
+
+docker exec -it localstack awslocal sqs set-queue-attributes --queue-url http://localhost:4566/000000000000/sns-canal-de-processamento --attributes '{\"Policy\":\"{\\\"Version\\\":\\\"2012-10-17\\\",\\\"Statement\\\":[{\\\"Effect\\\":\\\"Allow\\\",\\\"Principal\\\":\\\"*\\\",\\\"Action\\\":\\\"sqs:SendMessage\\\",\\\"Resource\\\":\\\"arn:aws:sqs:us-east-1:000000000000:sns-canal-de-processamento\\\",\\\"Condition\\\":{\\\"ArnEquals\\\":{\\\"aws:SourceArn\\\":\\\"arn:aws:sns:us-east-1:000000000000:canal-de-processamento\\\"}}}]}\"}'
+
+
+	
+	
+7. Assinar o tópico SNS à fila SQS (com DLQ ativada)
+
+docker exec -it localstack awslocal sns subscribe --topic-arn arn:aws:sns:us-east-1:000000000000:canal-de-processamento --protocol sqs --notification-endpoint arn:aws:sqs:us-east-1:000000000000:sns-canal-de-processamento --attributes '{\"RedrivePolicy\":\"{\\\"deadLetterTargetArn\\\":\\\"arn:aws:sqs:us-east-1:000000000000:sns-dlq-canal-de-processamento\\\"}\"}'
+
+  
+  
+8. Publicar a mensagem no tópico SNS
+Essa é a simulação do evento que vai acionar seu microserviço para fazer a importação:
+
+# Criar o objeto com os dados estruturados
+$payload = @{
+  video = @{
+    id_video   = "uuid-do-video"
+    title      = "Video para testes"
+    description = "Descricao do video para testes"
+    filename   = "video.mp4"
+    file_size  = 5000
+    full_path  = "s3:/caminho/para/o/video.mp4"
+    duration   = 300
+    framerate  = 30
+  }
+  user = @{
+    id_usuario = "uuid-do-usuario"
+    email      = "teste@teste.com"
+  }
+  config = @{
+    output_format = "png"
+    resolution    = "1920x1080"
+    interval      = 20
+  }
+} | ConvertTo-Json -Depth 3 -Compress
+
+# Publicar a mensagem no tópico SNS via LocalStack
+docker exec -it localstack awslocal sns publish --topic-arn arn:aws:sns:us-east-1:000000000000:canal-de-processamento --message "$payload"
+
+
+Verificar como chegou na fila: 
+
+docker exec -it localstack awslocal sqs receive-message --queue-url http://localhost:4566/000000000000/sns-canal-de-processamento
