@@ -1,7 +1,7 @@
 
 LOCALSTACK_URL="http://localhost:4566"  # Se estiver dentro do Kubernetes, use http://host.docker.internal:4566
 
-
+#teste. 
 echo "Verificando a saúde do Localstack..."
 curl -s "$LOCALSTACK_URL/_localstack/health" | jq .
 
