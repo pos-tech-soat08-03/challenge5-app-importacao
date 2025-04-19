@@ -3,6 +3,7 @@ name: Application CI - Dependencies, Builds, Unit Tests and SonarCloud quality c
 on:
   push:
     branches:
+      - "main"
       - "feature/*"
       - "hotfix/*"
       - "chore/*"
