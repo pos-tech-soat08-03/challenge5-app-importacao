@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jackapp-processamento-deployment
+  name: jackapp-importacao-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: jackapp-processamento
+      app: jackapp-importacao
   template:
     metadata:
-      name: jackapp-processamento
+      name: jackapp-importacao
       labels:
-        app: jackapp-processamento
+        app: jackapp-importacao
     spec:
       automountServiceAccountToken: false
       containers:
-      - name: jackapp-processamento-container
-        image: brunomoreirareis/jackapp-processamento:latest
+      - name: jackapp-importacao-container
+        image: brunomoreirareis/jackapp-importacao:latest
         resources:
           limits:
             memory: "1000Mi"
@@ -30,11 +30,14 @@ spec:
         - containerPort: 3000
         envFrom:
         - configMapRef:
-            name: jackapp-processamento-configmap
+            name: jackapp-importacao-configmap
             optional: true
+        - secretRef:
+            name: jackapp-importacao-secret  
+            optional: true  
         volumeMounts:
-        - name: jackapp-processamento-storage
+        - name: jackapp-importacao-storage
           mountPath: /data
       volumes:
-      - name: jackapp-processamento-storage
+      - name: jackapp-importacao-storage
         emptyDir: {}

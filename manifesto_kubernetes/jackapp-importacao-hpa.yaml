@@ -1,12 +1,12 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: jackapp-processamento-hpa
+  name: jackapp-importacao-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: jackapp-processamento-deployment
+    name: jackapp-importacao-deployment
   minReplicas: 1
   maxReplicas: 3
   metrics:
