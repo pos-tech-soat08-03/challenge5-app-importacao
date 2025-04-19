@@ -1,18 +1,20 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./node_modules/@types", "./src/types"],
     "outDir": "./dist",
     "rootDir": "./",
-    "target": "es2017",
+    "target": "es2020", // Updated target for newer JavaScript features
     "module": "commonjs",
     "moduleResolution": "node",
-    "types": [
-      "node"
-    ],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
-  }
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true, // Added for better compatibility with default imports
+    "noImplicitAny": true // Added to enforce stricter type checking
+  },
+  "include": [
+    "src/**/*",
+    "test/**/*" // Include test files for type checking
+  ],
 }

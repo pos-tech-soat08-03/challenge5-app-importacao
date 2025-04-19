@@ -19,92 +19,104 @@ export function createVideoImportRoutes(snsPublisher: SnsVideoPublisher) {
         throw new Error("ARN do tópico SNS não definido. Verifique AWS_SNS_VIDEO_IMPORT_TOPIC_ARN no .env.");
     }
 
-    // Instancia o publisher com o ARN carregado do .env
-    //const snsPublisher = new SnsVideoPublisher(topicArn);
-
     router.post("/import", async (req: Request, res: Response): Promise<void> => {
-        try {
-            const bb = busboy({ headers: req.headers });
+        const bb = busboy({ headers: req.headers });
 
-            let userId = "";
-            let videoId = "";
-            let originalFileName = "";
-            let fileSize = 0;
-            let tempFilePath = "";
+        let userId = "";
+        let videoId = "";
+        let originalFileName = "";
+        let fileSize = 0;
+        let tempFilePath = "";
 
-            bb.on("file", (_fieldname, file, info) => {
-                originalFileName = info.filename;
-                const tmpDir = os.tmpdir();
-                const tmpName = `${uuidv4()}-${originalFileName}`;
-                tempFilePath = path.join(tmpDir, tmpName);
+        bb.on("file", (_fieldname, file, info) => {
+            originalFileName = info.filename;
+            const tmpDir = os.tmpdir();
+            const tmpName = `${uuidv4()}-${originalFileName}`;
+            tempFilePath = path.join(tmpDir, tmpName);
 
-                const writeStream = fs.createWriteStream(tempFilePath);
-                file.pipe(writeStream);
+            const writeStream = fs.createWriteStream(tempFilePath);
+            file.pipe(writeStream);
 
-                file.on("data", (data) => {
-                    fileSize += data.length;
-                });
-
-                file.on("end", () => {
-                    writeStream.end();
-                });
+            file.on("data", (data) => {
+                fileSize += data.length;
             });
 
-            bb.on("field", (fieldname, val) => {
-                if (fieldname === "userId") userId = val;
-                if (fieldname === "videoId") videoId = val;
+            file.on("end", () => {
+                writeStream.end();
             });
+        });
 
-            bb.on("finish", async () => {
-                try {
-                    if (!userId || !videoId || !tempFilePath || !originalFileName) {
-                        res.status(400).json({ error: "Campos obrigatórios ausentes: userId, videoId ou arquivo." });
-                        return;
-                    }
+        bb.on("field", (fieldname, val) => {
+            if (fieldname === "userId") userId = val;
+            if (fieldname === "videoId") videoId = val;
+        });
 
-                    // Validação com FFmpeg
-                    await validateVideoFileWithFFmpeg(tempFilePath, originalFileName, fileSize);
-
-                    // Upload no S3
-                    const videoUrl = await uploadVideoToS3(tempFilePath, originalFileName);
-
-                    // Criação da entidade
-                    const importEntity = new VideoImportEntity(
-                        videoId,
-                        userId,
-                        ProcessingStatusEnum.PENDING,
-                        0,
-                        videoUrl,
-                        new Date(),
-                        new Date(),
-                        null,
-                        uuidv4()
-                    );
-
-                    // Publica no SNS
-                    await snsPublisher.publish(importEntity);
-
-                    res.status(201).json({
-                        message: "Vídeo validado, enviado para o S3 e importação iniciada com sucesso.",
-                        importId: importEntity.getImportId(),
-                        s3Url: videoUrl
-                    });
-                } catch (err: any) {
-                    console.error("[IMPORT ERROR]", err);
-                    res.status(400).json({ error: err.message || "Erro ao processar o vídeo." });
-                } finally {
-                    // Limpa o arquivo local
-                    if (tempFilePath && fs.existsSync(tempFilePath)) {
-                        fs.unlink(tempFilePath, () => { });
-                    }
+        bb.on("finish", async () => {
+            try {
+                // Validação dos campos obrigatórios
+                if (!userId || !videoId || !tempFilePath || !originalFileName) {
+                    res.status(400).json({ error: "Campos obrigatórios ausentes: userId, videoId ou arquivo." });
+                    return;
                 }
-            });
 
-            req.pipe(bb);
-        } catch (error: any) {
-            console.error("[IMPORT BUSBOY ERROR]", error);
-            res.status(500).json({ error: error.message || "Erro inesperado durante a importação." });
-        }
+                // Validação com FFmpeg
+                try {
+                    await validateVideoFileWithFFmpeg(tempFilePath, originalFileName, fileSize);
+                } catch (err: any) {
+                    console.error("[FFMPEG VALIDATION ERROR]", err);
+                    res.status(400).json({ error: "Erro na validação do vídeo." });
+                    return;
+                }
+
+                // Upload no S3
+                let videoUrl = "";
+                try {
+                    videoUrl = await uploadVideoToS3(tempFilePath, originalFileName);
+                } catch (err: any) {
+                    console.error("[S3 UPLOAD ERROR]", err);
+                    res.status(500).json({ error: "Erro ao fazer upload para o S3." });
+                    return;
+                }
+
+                // Criação da entidade de importação
+                const importEntity = new VideoImportEntity(
+                    videoId,
+                    userId,
+                    ProcessingStatusEnum.PENDING,
+                    0,
+                    videoUrl,
+                    new Date(),
+                    new Date(),
+                    null,
+                    uuidv4()
+                );
+
+                // Publica no SNS
+                try {
+                    await snsPublisher.publish(importEntity);
+                } catch (err: any) {
+                    console.error("[SNS PUBLISH ERROR]", err);
+                    res.status(500).json({ error: "Erro ao publicar no SNS." });
+                    return;
+                }
+
+                res.status(201).json({
+                    message: "Vídeo validado, enviado para o S3 e importação iniciada com sucesso.",
+                    importId: importEntity.getImportId(),
+                    s3Url: videoUrl
+                });
+            } catch (err: any) {
+                console.error("[IMPORT ERROR]", err);
+                res.status(500).json({ error: "Erro inesperado durante a importação." });
+            } finally {
+                // Limpeza do arquivo temporário
+                if (tempFilePath && fs.existsSync(tempFilePath)) {
+                    fs.unlink(tempFilePath, () => { });
+                }
+            }
+        });
+
+        req.pipe(bb);
     });
 
     return router;
