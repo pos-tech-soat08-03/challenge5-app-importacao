@@ -1,58 +1,72 @@
 import { v4 as uuidv4 } from 'uuid';
 export class VideoEntity {
-    id;
-    titulo;
-    descricao;
-    fileName;
-    fileExtension;
-    path;
-    fileSize;
-    encoding;
-    duration; // in seconds
-    fps;
-    constructor(titulo, descricao, fileName, fileExtension, path, fileSize, encoding, duration, fps, id) {
+
+    private readonly id: string;
+    private readonly titulo: string;
+    private readonly descricao: string;
+    private readonly fileName: string;
+    private readonly fileExtension: string;
+    private readonly path: string;
+    private readonly fileSize: number;
+    private readonly encoding: string;
+    private readonly duration: number; // in seconds
+    private readonly fps: number;
+
+    constructor (titulo: string, descricao: string, fileName: string, fileExtension: string, path: string, fileSize: number, encoding: string, duration: number, fps:number, id?: string) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.fileName = fileName;
-        this.fileExtension = fileExtension;
+        this.fileExtension = fileExtension; 
         this.path = path;
         this.fileSize = fileSize;
         this.encoding = encoding;
         this.duration = duration;
         this.fps = fps;
+
         if (!id) {
             id = uuidv4();
         }
         this.id = id ?? uuidv4();
     }
-    getId() {
+
+    public getId(): string {
         return this.id;
     }
-    getTitulo() {
+
+    public getTitulo(): string {
         return this.titulo;
     }
-    getDescricao() {
+
+    public getDescricao(): string {
         return this.descricao;
     }
-    getFileName() {
+
+    public getFileName(): string {
         return this.fileName;
     }
-    getFileExtension() {
+
+    public getFileExtension(): string {
         return this.fileExtension;
     }
-    getPath() {
+
+    public getPath(): string {
         return this.path;
     }
-    getFileSize() {
+
+    public getFileSize(): number {
         return this.fileSize;
     }
-    getEncoding() {
+
+    public getEncoding(): string {
         return this.encoding;
     }
-    getDuration() {
+
+    public getDuration(): number {
         return this.duration;
     }
-    getFps() {
+
+    public getFps(): number {
         return this.fps;
     }
+
 }
