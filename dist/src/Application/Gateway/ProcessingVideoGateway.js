@@ -1,66 +1,89 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.VideoProcessingGateway = void 0;
-const sequelize_1 = require("sequelize");
-const ProcessingStatusEnum_1 = require("../../Core/Entity/ValueObject/ProcessingStatusEnum");
-const axios_1 = __importDefault(require("axios"));
-class VideoProcessingModel extends sequelize_1.Model {
+import { Sequelize, DataTypes, Model } from "sequelize";
+import { ConnectionInfo } from "../../Core/Types/ConnectionInfo";
+import { VideoImportEntity } from "../../Core/Entity/VideoImportEntity";
+import { VideoImportInterface } from "../../Core/Interfaces/Gateway/VideoImportInterface";
+import { ProcessingStatusEnum } from "../../Core/Entity/ValueObject/ProcessingStatusEnum";
+import axios from "axios";
+
+class VideoProcessingModel extends Model {
+    public importId!: string;
+    public importStatus!: string;
+    public importStatusPercentage!: number;
+    public videoId!: string;
+    public userId!: string;
 }
-class VideoProcessingGateway {
-    constructor(dbconnection, sequelize, importGateway) {
-        this.dbconnection = dbconnection;
-        this.statusEndpoint = "http://outro-servico/status";
-        this.sequelize = new sequelize_1.Sequelize(this.dbconnection.database, this.dbconnection.username, this.dbconnection.password, {
-            host: this.dbconnection.hostname,
-            port: this.dbconnection.portnumb,
-            dialect: this.dbconnection.databaseType,
-        });
+
+export class VideoProcessingGateway {
+    private readonly sequelize: Sequelize;
+    private readonly statusEndpoint: string = "http://outro-servico/status";
+    private readonly importGateway: VideoImportInterface;
+
+    constructor(
+        private readonly dbconnection: ConnectionInfo,
+        sequelize: Sequelize,
+        importGateway: VideoImportInterface
+    ) {
+        this.sequelize = new Sequelize(
+            this.dbconnection.database,
+            this.dbconnection.username,
+            this.dbconnection.password,
+            {
+                host: this.dbconnection.hostname,
+                port: this.dbconnection.portnumb,
+                dialect: this.dbconnection.databaseType,
+            }
+        );
+        
         this.importGateway = importGateway;
     }
-    async processPendingImports() {
-        const pendingImports = await this.importGateway.getVideoImportList(ProcessingStatusEnum_1.ProcessingStatusEnum.PENDING);
-        if (!pendingImports)
-            return;
+
+    public async processPendingImports(): Promise<void> {
+        const pendingImports = await this.importGateway.getVideoImportList(ProcessingStatusEnum.PENDING);
+        if (!pendingImports) return;
+
         for (const importData of pendingImports) {
             try {
                 console.log(`Processando importação ${importData.getImportId()}...`);
-                importData.setImportStatus(ProcessingStatusEnum_1.ProcessingStatusEnum.IN_PROGRESS);
+                
+                
+                importData.setImportStatus(ProcessingStatusEnum.IN_PROGRESS);
                 importData.setImportStatusPercentage(50);
                 await this.importGateway.setVideoImportStatus(importData);
                 await this.ProcessingImportGateway(importData);
+                
+                
                 await this.simulateProcessing(importData);
-                importData.setImportStatus(ProcessingStatusEnum_1.ProcessingStatusEnum.COMPLETED);
+
+                
+                importData.setImportStatus(ProcessingStatusEnum.COMPLETED);
                 importData.setImportStatusPercentage(100);
                 await this.importGateway.setVideoImportStatus(importData);
                 await this.ProcessingImportGateway(importData);
+
                 console.log(`Importação ${importData.getImportId()} concluída.`);
-            }
-            catch (error) {
+            } catch (error) {
                 console.error(`Erro ao processar importação ${importData.getImportId()}:`, error);
-                importData.setImportStatus(ProcessingStatusEnum_1.ProcessingStatusEnum.FAILED);
+                importData.setImportStatus(ProcessingStatusEnum.FAILED);
                 await this.importGateway.setVideoImportStatus(importData);
                 await this.ProcessingImportGateway(importData);
             }
         }
     }
-    async simulateProcessing(importData) {
+
+    private async simulateProcessing(importData: VideoImportEntity): Promise<void> {
         await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulação de tempo de processamento
     }
-    async ProcessingImportGateway(importData) {
+
+    private async ProcessingImportGateway(importData: VideoImportEntity): Promise<void> {
         try {
-            await axios_1.default.post(this.statusEndpoint, {
+            await axios.post(this.statusEndpoint, {
                 importId: importData.getImportId(),
                 status: importData.getImportStatus(),
                 timestamp: new Date(),
             });
             console.log(`Status da importação ${importData.getImportId()} enviado com sucesso.`);
-        }
-        catch (error) {
+        } catch (error) {
             console.error(`Erro ao postar status da importação ${importData.getImportId()}:`, error);
         }
     }
 }
-exports.VideoProcessingGateway = VideoProcessingGateway;

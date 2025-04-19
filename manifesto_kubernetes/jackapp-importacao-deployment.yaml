@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: challenge5-app-importacao-deployment
+  name: jackapp-importacao-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: challenge5-app-importacao
+      app: jackapp-importacao
   template:
     metadata:
-      name: challenge5-app-importacao
+      name: jackapp-importacao
       labels:
-        app: challenge5-app-importacao
+        app: jackapp-importacao
     spec:
       automountServiceAccountToken: false
       containers:
-      - name: challenge5-app-importacao-container
-        image: brunomoreirareis/challenge5-app-importacao:latest
+      - name: jackapp-importacao-container
+        image: brunomoreirareis/jackapp-processamento:latest  # Usando a imagem do seu amigo
         resources:
           limits:
             memory: "1000Mi"
@@ -30,11 +30,11 @@ spec:
         - containerPort: 3000
         envFrom:
         - configMapRef:
-            name: challenge5-app-importacao-configmap
+            name: jackapp-importacao-configmap
             optional: true
         volumeMounts:
-        - name: challenge5-app-importacao-storage
+        - name: jackapp-importacao-storage
           mountPath: /data
       volumes:
-      - name: challenge5-app-importacao-storage
+      - name: jackapp-importacao-storage
         emptyDir: {}

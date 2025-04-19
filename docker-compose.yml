@@ -1,74 +1,36 @@
-version: "3.8"
-
+version: '3.8'
 services:
-  backend:
-    build: .
-    image: challenge5-app-importacao:1.0.0
-    container_name: challenge5
-    environment:
-      NODE_ENV: "development"
-      SERVER_PORT: "3000"
-      DATABASE_HOST: "challenge5_database"
-      DATABASE_PORT: "3306"
-      DATABASE_NAME: "challenge5_database_schema"
-      DATABASE_USER: "challenge5_database_username"
-      DATABASE_PASS: "challenge5_database_password"
-      AWS_REGION: "us-east-1"
-      AWS_ACCESS_KEY_ID: "ASIAUFXNGBOH6FNPBXQN"
-      AWS_SECRET_ACCESS_KEY: "tJdhyFtqeWKDt8bat6kddlmPxOY3d1y/G+TIhzyx"
-      AWS_SNS_VIDEO_IMPORT_TOPIC_ARN: "aws_sns_topic.sns-canal-de-processamento.arn"
-      USE_SNS: "true"
-    ports:
-      - "3000:3000"
-    depends_on:
-      challenge5_database:
-        condition: service_healthy
-      localstack:
-        condition: service_healthy
-    links:
-      - challenge5_database
-      - localstack
-
-  challenge5_database:
-    image: mysql:8.0.32
-    container_name: challenge5_database
-    restart: always
-    ports:
-      - "3306:3306"
-    expose:
-      - "3306"
-    volumes:
-      - challenge5_database:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: 'challenge5_database_schema'
-      MYSQL_USER: 'challenge5_database_username'
-      MYSQL_PASSWORD: 'challenge5_database_password'
-      MYSQL_ROOT_PASSWORD: 'challenge5_database_password_10'
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pchallenge5_database_password_10" ]
-      timeout: 5s
-      retries: 3
-
   localstack:
-    image: localstack/localstack:3.2
+    image: localstack/localstack:latest
     container_name: localstack
     ports:
-      - "4566:4566"
+      - "4566:4566" # Porta padrão do LocalStack
     environment:
-      - SERVICES=sns,sqs
-      - DEBUG=1
-      - AWS_ACCESS_KEY_ID=test
-      - AWS_SECRET_ACCESS_KEY=test
-      - AWS_DEFAULT_REGION=us-east-1
+      - SERVICES=sqs,sns,s3 # Ativa apenas SQS, SNS e S3
+      - AWS_DEFAULT_REGION=us-east-1 # Região simulada
+      - DEBUG=1 # Ativa logs detalhados (opcional)
     volumes:
-      - localstack_data:/var/lib/localstack
-      - /var/run/docker.sock:/var/run/docker.sock
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:4566/_localstack/health" ]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+      - "./localstack-data:/var/lib/localstack" # Persiste dados locais
+      - "/var/run/docker.sock:/var/run/docker.sock" # Permite ao LocalStack usar o Docker
 
-volumes:
-  challenge5_database:
-  localstack_data:
+# version: "3.8"
+# services:
+#   sonarqube:
+#     image: sonarqube:10.6-community
+#     ports:
+#       - "9000:9000"
+#     environment:
+#       - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+#     volumes:
+#       - sonarqube_data:/opt/sonarqube/data
+#       - sonarqube_logs:/opt/sonarqube/logs
+#       - sonarqube_extensions:/opt/sonarqube/extensions
+#     networks:
+#       - sonar-network
+# volumes:
+#   sonarqube_data:
+#   sonarqube_logs:
+#   sonarqube_extensions:
+# networks:
+#   sonar-network:
+#     driver: bridge
