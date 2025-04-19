@@ -21,6 +21,7 @@
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@ffprobe-installer/ffprobe": "^2.1.2",
     "@types/jest": "^29.5.13",
+    "aws-sdk": "^2.1692.0",
     "axios": "^1.8.4",
     "busboy": "^1.6.0",
     "dotenv": "^16.4.7",
@@ -41,7 +42,7 @@
     "@types/express": "^5.0.1",
     "@types/fluent-ffmpeg": "^2.1.27",
     "@types/multer": "^1.4.12",
-    "@types/node": "^22.7.4",
+    "@types/node": "^22.14.0",
     "@types/sequelize": "^4.28.20",
     "@types/swagger-ui-express": "^4.1.8",
     "@types/tmp": "^0.2.6",
@@ -54,7 +55,7 @@
     "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.6.2"
+    "typescript": "^5.8.3"
   },
   "jest": {
     "preset": "ts-jest",

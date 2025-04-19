@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   backend:
     build: .
@@ -11,21 +13,30 @@ services:
       DATABASE_NAME: "challenge5_database_schema"
       DATABASE_USER: "challenge5_database_username"
       DATABASE_PASS: "challenge5_database_password"
+      AWS_REGION: "us-east-1"
+      AWS_ACCESS_KEY_ID: "ASIAUFXNGBOH6FNPBXQN"
+      AWS_SECRET_ACCESS_KEY: "tJdhyFtqeWKDt8bat6kddlmPxOY3d1y/G+TIhzyx"
+      AWS_SNS_VIDEO_IMPORT_TOPIC_ARN: "aws_sns_topic.sns-canal-de-processamento.arn"
+      USE_SNS: "true"
     ports:
       - "3000:3000"
-    links:
-      - challenge5_database
     depends_on:
       challenge5_database:
         condition: service_healthy
+      localstack:
+        condition: service_healthy
+    links:
+      - challenge5_database
+      - localstack
+
   challenge5_database:
-    image: mysql:9.0.1
+    image: mysql:8.0.32
     container_name: challenge5_database
     restart: always
     ports:
-      - '3306:3306'
+      - "3306:3306"
     expose:
-      - '3306'
+      - "3306"
     volumes:
       - challenge5_database:/var/lib/mysql
     environment:
@@ -37,5 +48,27 @@ services:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pchallenge5_database_password_10" ]
       timeout: 5s
       retries: 3
+
+  localstack:
+    image: localstack/localstack:3.2
+    container_name: localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sns,sqs
+      - DEBUG=1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:4566/_localstack/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
 volumes:
   challenge5_database:
+  localstack_data:
