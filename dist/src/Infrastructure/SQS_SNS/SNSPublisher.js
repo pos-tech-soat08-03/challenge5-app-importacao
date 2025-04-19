@@ -1,15 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SNSPublisher = void 0;
-const client_sns_1 = require("@aws-sdk/client-sns");
-const SNSClientProvider_1 = require("./SNSClientProvider");
-class SNSPublisher {
-    constructor() {
-        this.client = SNSClientProvider_1.SNSClientProvider.getClient();
-    }
+import { PublishCommand } from "@aws-sdk/client-sns";
+import { SNSClientProvider } from "./SNSClientProvider";
+export class SNSPublisher {
+    client = SNSClientProvider.getClient();
     async publishToTopic(topicArn, message, attributes) {
         try {
-            const command = new client_sns_1.PublishCommand({
+            const command = new PublishCommand({
                 TopicArn: topicArn,
                 Message: message,
                 MessageAttributes: attributes
@@ -31,4 +26,3 @@ class SNSPublisher {
         }
     }
 }
-exports.SNSPublisher = SNSPublisher;

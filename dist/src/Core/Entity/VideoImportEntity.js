@@ -1,7 +1,16 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.VideoImportEntity = void 0;
-class VideoImportEntity {
+export class VideoImportEntity {
+    videoId;
+    userId;
+    importStatus;
+    importStatusPercentage;
+    importLog;
+    createdAt;
+    updatedAt;
+    finishedAt;
+    importId;
+    getStatus() {
+        throw new Error("Method not implemented.");
+    }
     constructor(videoId, userId, importStatus, importStatusPercentage, importLog, createdAt, updatedAt, finishedAt, importId) {
         this.videoId = videoId;
         this.userId = userId;
@@ -68,4 +77,3 @@ class VideoImportEntity {
         this.importId = importId;
     }
 }
-exports.VideoImportEntity = VideoImportEntity;

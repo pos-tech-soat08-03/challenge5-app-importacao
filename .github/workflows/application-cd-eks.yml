@@ -1,0 +1,98 @@
+name: Application CD - Kubernetes Deployment in AWS EKS
+
+on: 
+  workflow_dispatch:
+    inputs:
+      aws_access_key_id:
+        description: 'AWS Access Key ID'
+        required: true
+      aws_secret_access_key:
+        description: 'AWS Secret Access Key'
+        required: true
+      aws_session_token:
+        description: 'AWS Session Token'
+        required: true
+      aws_account_id:
+        description: 'AWS Account ID'
+        required: true
+      aws_backend_bucket:
+        description: 'AWS S3 Bucket Terraform State'
+        required: true
+      aws_region:
+        description: 'AWS Region'
+        required: true
+        default: 'us-east-1'
+
+jobs:
+  terraform:
+    name: Application Deployment
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+  
+    steps:
+      
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Mascarar Credenciais
+      run: |
+        echo "::add-mask::${{ github.event.inputs.aws_access_key_id }}"
+        echo "::add-mask::${{ github.event.inputs.aws_secret_access_key }}"
+        echo "::add-mask::${{ github.event.inputs.aws_session_token }}"
+        echo "::add-mask::${{ github.event.inputs.aws_account_id }}"
+        echo "::add-mask::${{ github.event.inputs.aws_backend_bucket }}"
+        echo "::add-mask::${{ github.event.inputs.aws_region }}"
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Configure AWS CLI 
+      uses: aws-actions/configure-aws-credentials@v1
+      with: 
+        aws-access-key-id: ${{ github.event.inputs.aws_access_key_id }}
+        aws-secret-access-key: ${{ github.event.inputs.aws_secret_access_key }}
+        aws-session-token: ${{ github.event.inputs.aws_session_token }}
+        aws-region: ${{ github.event.inputs.aws_region }}
+            
+    - name: Verify AWS CLI Configuration
+      run: aws sts get-caller-identity
+
+    - name: Download terraform_infrastructure.json from S3 infrastructure challenge5-infra/terraform.tfstate
+      run: | 
+        aws s3 cp s3://${{ github.event.inputs.aws_backend_bucket }}/challenge5-infra/terraform.tfstate terraform_infrastructure.json 
+        
+    - name: Extract EKS Cluster Name 
+      id: extract-cluster-name
+      run: | 
+        CLUSTER_NAME=$(jq -r '.outputs.jackapp_cluster_name.value' terraform_infrastructure.json)
+        echo "CLUSTER_NAME=$CLUSTER_NAME" >> $GITHUB_OUTPUT
+
+    - name: Update kubeconfig 
+      run: | 
+        aws eks update-kubeconfig --name ${{ steps.extract-cluster-name.outputs.CLUSTER_NAME }} --region ${{ github.event.inputs.aws_region }} 
+    
+    - name: Create file jackapp-importacao-configmap.yaml
+      working-directory: manifesto_kubernetes/
+      run: |
+          cat <<EOF > jackapp-importacao-configmap.yaml
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: jackapp-importacao-configmap
+          data:
+            NODE_ENV: development
+            AWS_REGION: "${{ github.event.inputs.aws_region }}"    
+            SQS_QUEUE_URL: "http://sqs.us-east-1.localhost.localstack.cloud:4566/${{ github.event.inputs.aws_account_id }}/sqs-canal-de-processamento"
+            S3_BUCKET_NAME: video-importing-bucket
+          EOF
+
+
+    - name: Deploy in AWS EKS Cluster
+      working-directory: manifesto_kubernetes/ 
+      run: |
+        kubectl apply -f jackapp-importacao-configmap.yaml
+        kubectl apply -f jackapp-importacao-hpa.yaml
+        kubectl apply -f jackapp-importacao-deployment.yaml

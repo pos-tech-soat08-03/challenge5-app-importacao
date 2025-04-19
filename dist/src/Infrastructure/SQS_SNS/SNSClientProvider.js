@@ -1,19 +1,17 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SNSClientProvider = void 0;
-const client_sns_1 = require("@aws-sdk/client-sns");
-class SNSClientProvider {
+import { SNSClient } from "@aws-sdk/client-sns";
+export class SNSClientProvider {
+    static client;
     static getClient() {
         if (!this.client) {
-            this.client = new client_sns_1.SNSClient({
+            this.client = new SNSClient({
                 region: process.env.AWS_REGION,
                 credentials: {
                     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
                     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+                    sessionToken: process.env.AWS_SESSION_TOKEN,
                 },
             });
         }
         return this.client;
     }
 }
-exports.SNSClientProvider = SNSClientProvider;

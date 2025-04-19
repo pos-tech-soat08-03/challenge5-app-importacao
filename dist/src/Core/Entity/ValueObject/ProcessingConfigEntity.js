@@ -1,14 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProcessingConfigEntity = void 0;
-const uuid_1 = require("uuid");
-class ProcessingConfigEntity {
+import { v4 as uuidv4 } from 'uuid';
+export class ProcessingConfigEntity {
+    id;
+    outputFormat;
+    resolution;
+    interval;
     constructor(outputFormat, resolution, interval, id) {
         this.outputFormat = outputFormat;
         this.resolution = resolution;
         this.interval = interval;
         if (!id) {
-            id = (0, uuid_1.v4)();
+            id = uuidv4();
         }
         this.id = id;
     }
@@ -25,4 +26,3 @@ class ProcessingConfigEntity {
         return this.interval;
     }
 }
-exports.ProcessingConfigEntity = ProcessingConfigEntity;

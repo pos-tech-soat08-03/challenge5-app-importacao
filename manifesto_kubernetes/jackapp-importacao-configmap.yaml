@@ -5,8 +5,9 @@ metadata:
 data:
   NODE_ENV: local
   AWS_REGION: us-east-1
-  AWS_ENDPOINT: http://localstack:4566
-  SNS_STATUS_TOPIC_ARN: arn:aws:sns:us-east-1:000000000000:canal-de-processamento
-  SQS_QUEUE_URL: http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/sns-canal-de-processamento
-  S3_BUCKET_NAME: video-import-bucket  
+  SQS_QUEUE_URL: http://localhost:4566/000000000000/sqs-canal-de-processamento
+  AWS_SNS_VIDEO_IMPORT_TOPIC_ARN: arn:aws:sns:us-east-1:123456789012:sns-canal-de-processamento
+  AWS_SQS_DLQ_URL: http://localhost:4566/000000000000/sns-dlq-canal-de-processamento
+  S3_BUCKET_NAME: video-importing-bucket
+  
   

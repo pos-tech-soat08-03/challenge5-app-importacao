@@ -1,8 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.VideoEntity = void 0;
-const uuid_1 = require("uuid");
-class VideoEntity {
+import { v4 as uuidv4 } from 'uuid';
+export class VideoEntity {
+    id;
+    titulo;
+    descricao;
+    fileName;
+    fileExtension;
+    path;
+    fileSize;
+    encoding;
+    duration; // in seconds
+    fps;
     constructor(titulo, descricao, fileName, fileExtension, path, fileSize, encoding, duration, fps, id) {
         this.titulo = titulo;
         this.descricao = descricao;
@@ -14,9 +21,9 @@ class VideoEntity {
         this.duration = duration;
         this.fps = fps;
         if (!id) {
-            id = (0, uuid_1.v4)();
+            id = uuidv4();
         }
-        this.id = id !== null && id !== void 0 ? id : (0, uuid_1.v4)();
+        this.id = id ?? uuidv4();
     }
     getId() {
         return this.id;
@@ -49,4 +56,3 @@ class VideoEntity {
         return this.fps;
     }
 }
-exports.VideoEntity = VideoEntity;
