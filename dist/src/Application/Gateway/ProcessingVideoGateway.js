@@ -1,46 +1,67 @@
-import { Sequelize, Model } from "sequelize";
+import { Sequelize, DataTypes, Model } from "sequelize";
+import { ConnectionInfo } from "../../Core/Types/ConnectionInfo";
+import { VideoImportEntity } from "../../Core/Entity/VideoImportEntity";
+import { VideoImportInterface } from "../../Core/Interfaces/Gateway/VideoImportInterface";
 import { ProcessingStatusEnum } from "../../Core/Entity/ValueObject/ProcessingStatusEnum";
 import axios from "axios";
+
 class VideoProcessingModel extends Model {
-    importId;
-    importStatus;
-    importStatusPercentage;
-    videoId;
-    userId;
+    public importId!: string;
+    public importStatus!: string;
+    public importStatusPercentage!: number;
+    public videoId!: string;
+    public userId!: string;
 }
+
 export class VideoProcessingGateway {
-    dbconnection;
-    sequelize;
-    statusEndpoint = "http://outro-servico/status";
-    importGateway;
-    constructor(dbconnection, sequelize, importGateway) {
-        this.dbconnection = dbconnection;
-        this.sequelize = new Sequelize(this.dbconnection.database, this.dbconnection.username, this.dbconnection.password, {
-            host: this.dbconnection.hostname,
-            port: this.dbconnection.portnumb,
-            dialect: this.dbconnection.databaseType,
-        });
+    private readonly sequelize: Sequelize;
+    private readonly statusEndpoint: string = "http://outro-servico/status";
+    private readonly importGateway: VideoImportInterface;
+
+    constructor(
+        private readonly dbconnection: ConnectionInfo,
+        sequelize: Sequelize,
+        importGateway: VideoImportInterface
+    ) {
+        this.sequelize = new Sequelize(
+            this.dbconnection.database,
+            this.dbconnection.username,
+            this.dbconnection.password,
+            {
+                host: this.dbconnection.hostname,
+                port: this.dbconnection.portnumb,
+                dialect: this.dbconnection.databaseType,
+            }
+        );
+        
         this.importGateway = importGateway;
     }
-    async processPendingImports() {
+
+    public async processPendingImports(): Promise<void> {
         const pendingImports = await this.importGateway.getVideoImportList(ProcessingStatusEnum.PENDING);
-        if (!pendingImports)
-            return;
+        if (!pendingImports) return;
+
         for (const importData of pendingImports) {
             try {
                 console.log(`Processando importação ${importData.getImportId()}...`);
+                
+                
                 importData.setImportStatus(ProcessingStatusEnum.IN_PROGRESS);
                 importData.setImportStatusPercentage(50);
                 await this.importGateway.setVideoImportStatus(importData);
                 await this.ProcessingImportGateway(importData);
+                
+                
                 await this.simulateProcessing(importData);
+
+                
                 importData.setImportStatus(ProcessingStatusEnum.COMPLETED);
                 importData.setImportStatusPercentage(100);
                 await this.importGateway.setVideoImportStatus(importData);
                 await this.ProcessingImportGateway(importData);
+
                 console.log(`Importação ${importData.getImportId()} concluída.`);
-            }
-            catch (error) {
+            } catch (error) {
                 console.error(`Erro ao processar importação ${importData.getImportId()}:`, error);
                 importData.setImportStatus(ProcessingStatusEnum.FAILED);
                 await this.importGateway.setVideoImportStatus(importData);
@@ -48,10 +69,12 @@ export class VideoProcessingGateway {
             }
         }
     }
-    async simulateProcessing(importData) {
+
+    private async simulateProcessing(importData: VideoImportEntity): Promise<void> {
         await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulação de tempo de processamento
     }
-    async ProcessingImportGateway(importData) {
+
+    private async ProcessingImportGateway(importData: VideoImportEntity): Promise<void> {
         try {
             await axios.post(this.statusEndpoint, {
                 importId: importData.getImportId(),
@@ -59,8 +82,7 @@ export class VideoProcessingGateway {
                 timestamp: new Date(),
             });
             console.log(`Status da importação ${importData.getImportId()} enviado com sucesso.`);
-        }
-        catch (error) {
+        } catch (error) {
             console.error(`Erro ao postar status da importação ${importData.getImportId()}:`, error);
         }
     }

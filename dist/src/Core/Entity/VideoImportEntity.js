@@ -1,79 +1,93 @@
+import { ProcessingStatusEnum } from "./ValueObject/ProcessingStatusEnum";
+
+
 export class VideoImportEntity {
-    videoId;
-    userId;
-    importStatus;
-    importStatusPercentage;
-    importLog;
-    createdAt;
-    updatedAt;
-    finishedAt;
-    importId;
     getStatus() {
         throw new Error("Method not implemented.");
     }
-    constructor(videoId, userId, importStatus, importStatusPercentage, importLog, createdAt, updatedAt, finishedAt, importId) {
-        this.videoId = videoId;
-        this.userId = userId;
-        this.importStatus = importStatus;
-        this.importStatusPercentage = importStatusPercentage;
-        this.importLog = importLog;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.finishedAt = finishedAt;
-        this.importId = importId;
-    }
-    getVideoId() {
+    constructor(
+        private videoId: string,
+        private userId: string,
+        private importStatus: ProcessingStatusEnum,
+        private importStatusPercentage: number,
+        private importLog: string,
+        private createdAt: Date,
+        private updatedAt: Date,
+        private finishedAt: Date | null,
+        private importId: string
+    ) {}
+
+    
+
+    public getVideoId(): string {
         return this.videoId;
     }
-    setVideoId(videoId) {
+
+    public setVideoId(videoId: string): void {
         this.videoId = videoId;
     }
-    getUserId() {
+
+    public getUserId(): string {
         return this.userId;
     }
-    setUserId(userId) {
+
+    public setUserId(userId: string): void {
         this.userId = userId;
     }
-    getImportStatus() {
+
+    public getImportStatus(): ProcessingStatusEnum {
         return this.importStatus;
     }
-    setImportStatus(status) {
+
+    public setImportStatus(status: ProcessingStatusEnum): void {
         this.importStatus = status;
     }
-    getImportStatusPercentage() {
+
+    public getImportStatusPercentage(): number {
         return this.importStatusPercentage;
     }
-    setImportStatusPercentage(percentage) {
+
+    public setImportStatusPercentage(percentage: number): void {
         this.importStatusPercentage = percentage;
     }
-    getImportLog() {
+
+    public getImportLog(): string {
         return this.importLog;
     }
-    setImportLog(log) {
+
+    public setImportLog(log: string): void {
         this.importLog = log;
     }
-    getCreatedAt() {
+
+    public getCreatedAt(): Date {
         return this.createdAt;
     }
-    setCreatedAt(date) {
+
+    public setCreatedAt(date: Date): void {
         this.createdAt = date;
     }
-    getUpdatedAt() {
+
+    public getUpdatedAt(): Date {
         return this.updatedAt;
     }
-    setUpdatedAt(date) {
+
+    public setUpdatedAt(date: Date): void {
         this.updatedAt = date;
     }
-    getFinishedAt() {
+
+    public getFinishedAt(): Date | null {
         return this.finishedAt;
     }
-    setFinishedAt(date) {
+
+    public setFinishedAt(date: Date | null): void {
         this.finishedAt = date;
     }
-    getImportId() {
+
+    public getImportId(): string {
         return this.importId;
     }
-    setImportId(importId) {
+
+    public setImportId(importId: string): void {
         this.importId = importId;
     }
 }

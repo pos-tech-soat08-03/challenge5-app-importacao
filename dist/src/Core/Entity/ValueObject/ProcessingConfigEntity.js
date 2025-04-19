@@ -1,28 +1,37 @@
 import { v4 as uuidv4 } from 'uuid';
+
 export class ProcessingConfigEntity {
-    id;
-    outputFormat;
-    resolution;
-    interval;
-    constructor(outputFormat, resolution, interval, id) {
+
+    private readonly id: string;
+    private readonly outputFormat: string;
+    private readonly resolution: string;
+    private readonly interval: number;
+    
+    constructor (outputFormat: string, resolution: string, interval: number, id?: string) {
         this.outputFormat = outputFormat;
         this.resolution = resolution;
         this.interval = interval;
+
         if (!id) {
             id = uuidv4();
         }
         this.id = id;
     }
-    getId() {
+
+    public getId(): string {
         return this.id;
     }
-    getOutputFormat() {
+
+    public getOutputFormat(): string {
         return this.outputFormat;
     }
-    getResolution() {
+
+    public getResolution(): string {
         return this.resolution;
     }
-    getInterval() {
+
+    public getInterval(): number {
         return this.interval;
     }
+
 }
