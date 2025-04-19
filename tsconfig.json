@@ -1,25 +1,25 @@
 {
   "compilerOptions": {
-    "target": "es2022",  // Mantemos o target como ES2022
-    "module": "es2022",  // Garantir que o módulo seja compatível com ES2022 ou superior
+    "target": "es2022",  
+    "module": "es2022",  
     "typeRoots": [
       "./node_modules/@types",
       "./src/types"
     ],
-    "outDir": "./dist",  // Diretório de saída para os arquivos compilados
-    "rootDir": "./",  // Diretório raiz onde o TypeScript irá procurar os arquivos de origem
-    "moduleResolution": "node",  // Garantir que o Node.js resolverá os módulos corretamente
+    "outDir": "./dist",  
+    "rootDir": "./",  
+    "moduleResolution": "node",  
     "types": [
       "node"
     ],
-    "esModuleInterop": true,  // Para garantir que a interoperabilidade de módulos funcionará corretamente
-    "forceConsistentCasingInFileNames": true,  // Garantir consistência nos nomes de arquivos
-    "strict": true,  // Ativar todas as verificações de tipo rigorosas
-    "skipLibCheck": true,  // Ignorar verificações de tipo em arquivos de biblioteca (para maior desempenho)
-    "resolveJsonModule": true,  // Permitir a importação de arquivos JSON
-    "baseUrl": ".",  // Para resolver corretamente caminhos relativos no projeto
+    "esModuleInterop": true, 
+    "forceConsistentCasingInFileNames": true,  
+    "strict": true, 
+    "skipLibCheck": true,  
+    "resolveJsonModule": true,  
+    "baseUrl": ".",  
     "paths": {
-      "*": ["node_modules/*", "src/*"]  // Ajustar os caminhos para garantir que o TypeScript encontre os arquivos na estrutura correta
+      "*": ["node_modules/*", "src/*"]  
     }
   },
   "include": [
