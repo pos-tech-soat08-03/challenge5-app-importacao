@@ -96,3 +96,11 @@ jobs:
         kubectl apply -f jackapp-importacao-configmap.yaml
         kubectl apply -f jackapp-importacao-hpa.yaml
         kubectl apply -f jackapp-importacao-deployment.yaml
+    
+    - name: Export Load Balancer Hostname and Port to S3
+      run: |
+        echo '{' > jackapp-status.json
+        echo '  "lb_hostname": "${{ steps.get-load-balancer-hostname.outputs.LB_HOSTNAME }}",' >> jackapp-importacao.json
+        echo '  "lb_port": "${{ steps.get-load-balancer-port.outputs.LB_PORT }}"' >> jackapp-importacao.json
+        echo '}' >> jackapp-importacao.json
+        aws s3 cp jackapp-importacao.json s3://${{ github.event.inputs.aws_backend_bucket }}/jackapp-importacao/jackapp-importacao.json
