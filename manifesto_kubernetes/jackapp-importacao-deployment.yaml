@@ -16,7 +16,7 @@ spec:
       automountServiceAccountToken: false
       containers:
       - name: jackapp-importacao-container
-        image: brunomoreirareis/jackapp-processamento:latest  # Usando a imagem do seu amigo
+        image: brunomoreirareis/jackapp-processamento:latest  
         resources:
           limits:
             memory: "1000Mi"
