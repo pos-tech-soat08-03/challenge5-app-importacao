@@ -1,0 +1,7 @@
+organization=pos-tech-soat08-03
+projectKey=challenge5-app-importacao
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.62212
+dashboardUrl=https://sonarcloud.io/dashboard?id=challenge5-app-importacao
+ceTaskId=AZZaOsn0VBQ01pByaG2G
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZZaOsn0VBQ01pByaG2G
