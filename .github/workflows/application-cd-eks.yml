@@ -79,20 +79,19 @@ jobs:
     - name: Create file jackapp-importacao-configmap.yaml
       working-directory: manifesto_kubernetes/
       run: |
-        cat <<EOF > jackapp-importacao-configmap.yaml
-        apiVersion: v1
-        kind: ConfigMap
-        metadata:
-          name: jackapp-importacao-configmap
-        data:
-          NODE_ENV: development
+          cat <<EOF > jackapp-importacao-configmap.yaml
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+           name: jackapp-importacao-configmap
+          data:
             AWS_REGION: "${{ github.event.inputs.aws_region }}"
             AWS_ACCESS_KEY_ID: "${{ github.event.inputs.aws_access_key_id }}"
             AWS_SECRET_ACCESS_KEY: "${{ github.event.inputs.aws_secret_access_key }}"
             AWS_SESSION_TOKEN: "${{ github.event.inputs.aws_session_token }}"
-            SQS_QUEUE_URL: "http://sqs.us-east-1.localhost.localstack.cloud:4566/${{ github.event.inputs.aws_account_id }}/sqs-canal-de-processamento"
+            SQS_QUEUE_URL: "${{steps.sqs-processing.outputs.SQS_QUEUE_URL}}"
             S3_BUCKET_NAME: "${{ github.event.inputs.aws_backend_bucket }}"
-            EOF
+          EOF
 
     - name: Deploy in AWS EKS Cluster
       working-directory: manifesto_kubernetes/
