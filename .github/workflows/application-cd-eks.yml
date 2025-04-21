@@ -91,7 +91,7 @@ jobs:
             AWS_SECRET_ACCESS_KEY: "${{ github.event.inputs.aws_secret_access_key }}"
             AWS_SESSION_TOKEN: "${{ github.event.inputs.aws_session_token }}"
             SQS_QUEUE_URL: "http://sqs.us-east-1.localhost.localstack.cloud:4566/${{ github.event.inputs.aws_account_id }}/sqs-canal-de-processamento"
-            S3_BUCKET_NAME: video-importing-bucket
+            S3_BUCKET_NAME: "${{ github.event.inputs.aws_backend_bucket }}"
             EOF
 
     - name: Deploy in AWS EKS Cluster
