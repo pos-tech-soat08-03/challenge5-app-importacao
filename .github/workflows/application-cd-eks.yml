@@ -99,8 +99,12 @@ jobs:
         kubectl apply -f jackapp-importacao-hpa.yaml
         kubectl apply -f jackapp-importacao-deployment.yaml
 
+<<<<<<< HEAD
     # ⚠️ Atenção: esse step depende de steps anteriores que não existem no workflow.
     # Você precisa adicionar esses outputs em steps reais de descoberta do load balancer.
+=======
+   
+>>>>>>> c0a992868abb87a1da9b92b88d655c51d04193bb
     - name: Export Load Balancer Hostname and Port to S3
       run: |
         echo '{' > jackapp-importacao.json
