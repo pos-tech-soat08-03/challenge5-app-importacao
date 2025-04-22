@@ -13,6 +13,19 @@ O Grupo que implementou a solução (Grupo 03), é composto pelos seguintes inte
 - Matias Correa Franco de Faria, devmatiascff@gmail.com, RM357411, @matiasf8321
 - Rafael da Silva Andrade, rafaandrade_@outlook.com, RM357010, @andrade_rafael
 
+## Links importantes da Fase 4 🌟
+Repositório das demais aplicacoes no Github:
+
+
+- Microserviços (aplicações):
+    - [JackApp-Status](https://github.com/pos-tech-soat08-03/challenge5-Jackapp-status)
+    - [JackApp-Processamento](https://github.com/pos-tech-soat08-03/challenger5-app-processamento)
+    - [JackApp-Serverless](https://github.com/pos-tech-soat08-03/challenge5-Jackapp-serverless)
+    - [JackApp-Infraestrutura](https://github.com/pos-tech-soat08-03/challenge5-Jackapp-infra)
+ 
+  📹 Link do Vídeo com a explicação do Tech Challenge 5 [https://youtu.be/g5I3aRwP_5M](https://youtu.be/g5I3aRwP_5M)
+
+
 ## Repositório dedicado para Microserviço de Importação 
 - Inclui o código da aplicação em Typescript e dependências associadas.
 - Inclui persistência de dados em Banco Relacional MySQL
@@ -305,12 +318,3 @@ Nas imagens abaixo, e possivel verificar a arquitetura utilizada no projeto e ta
 
 
 ![Visao Arquitetural](./docs/fluxo_arquitetura.JPG)
-
-
-## Para mais informações sobre a arquitetura, verifique o readme dos outros repositorios:
-
-- Microserviços (aplicações):
-    - [JackApp-Status](https://github.com/pos-tech-soat08-03/challenge5-Jackapp-status)
-    - [JackApp-Processamento](https://github.com/pos-tech-soat08-03/challenger5-app-processamento)
-    - [JackApp-Serverless](https://github.com/pos-tech-soat08-03/challenge5-Jackapp-serverless)
-    - [JackApp-Infraestrutura](https://github.com/pos-tech-soat08-03/challenge5-Jackapp-infra)
