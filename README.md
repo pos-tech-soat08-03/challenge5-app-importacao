@@ -50,7 +50,7 @@ O workflow de CI é acionado a cada push no repositório.
 
 [As ultimas execuções do CI podem ser visualizadas nesse link](https://github.com/pos-tech-soat08-03/challenge5-app-importacao/actions/workflows/application-ci.yml)
 
-<![Fluxo CI](C:\Users\rafaa\OneDrive\Imagens\exemplo_ci.JPG)
+![Fluxo CI](./docs/exemplo_ci.JPG)
 
 ### CD - Continuous Deployment
 
