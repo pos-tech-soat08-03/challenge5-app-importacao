@@ -308,7 +308,6 @@ Nas imagens abaixo, e possivel verificar a arquitetura utilizada no projeto e ta
 ## Para mais informações sobre a arquitetura, verifique o readme dos outros repositorios:
 
 - Microserviços (aplicações):
-    - [JackApp-Importação](https://github.com/pos-tech-soat08-03/challenge5-app-importacao)
     - [JackApp-Status](https://github.com/pos-tech-soat08-03/challenge5-Jackapp-status)
     - [JackApp-Processamento](https://github.com/pos-tech-soat08-03/challenger5-app-processamento)
     - [JackApp-Serverless](https://github.com/pos-tech-soat08-03/challenge5-Jackapp-serverless)
