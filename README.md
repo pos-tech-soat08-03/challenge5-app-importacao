@@ -38,7 +38,7 @@ O Projeto no SonarCloud pode ser acessado em:
 
 ## Cobertura de Testes
 
-<mark>TODO - Inserir Imagem</mark>
+![Fluxo Sonar](./docs/Cobertura_Sonar.JPG)
 
 ## Configuração do CI/CD
 
@@ -59,12 +59,12 @@ O workflow de CD possui duas etapas:
 - A primeira acontece ao finalizar o merge, e realiza o deploy da aplicação no Docker Hub.
 [As ultimas execuções do CD de Imagem podem ser visualizadas nesse link](https://github.com/pos-tech-soat08-03/challenge5-app-importacao/actions/workflows/application-cd-img.yml)
 
-<mark>TODO - Inserir Imagem</mark>
+![Fluxo CD_Dockerhub](./docs/CD_dockerhub.JPG)
 
 - A segunda parte é manual, e realiza o deploy da aplicação no Cluster EKS na AWS.
 [As ultimas execuções do CD EKS podem ser visualizadas nesse link](https://github.com/pos-tech-soat08-03/challenge5-app-importacao/actions/workflows/application-cd-eks.yml)
 
-<mark>TODO - Inserir Imagem</mark>
+![Fluxo CD_EKS](./docs/CD_eks.JPG)
 
 ### Subindo a aplicação na AWS com o Github Actions (Produção)
 
@@ -284,8 +284,11 @@ Contém os casos de uso, responsáveis por executar as regras de negócios da ap
     - `Feature: {NúmeroTask} - {mensagem}` Para implementar funcionalidades
     - `Chore: {NúmeroTask} - {mensagem}` Para alterações que não impactem o uso (débito técnico)
 
-## Documentação adicional
+## Arquitetura e Fluxo de Importacao 
 
-Para mais informações sobre a arquitetura, verifique o readme dos outros repositorios:
+Nas imagens abaixo, e possivel verificar a arquitetura utilizada no projeto e tambem o fluxo demonstrando o funcionamento do servico de importacao com suas respectivas integracoes. 
 
-<mark>TODO - Inserir Imagem</mark>
+![Exemplo importacao](./docs/exemplo_importacao.JPG)
+
+
+![Visao Arquitetural](./docs/fluxo_arquitetura.JPG)
