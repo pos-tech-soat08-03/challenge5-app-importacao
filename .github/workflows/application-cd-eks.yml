@@ -72,6 +72,24 @@ jobs:
         CLUSTER_NAME=$(jq -r '.outputs.jackapp_cluster_name.value' terraform_infrastructure.json)
         echo "CLUSTER_NAME=$CLUSTER_NAME" >> $GITHUB_OUTPUT
 
+    - name: Extract SQS Url for Processing
+      id: sqs-processing
+      run: | 
+        SQS_QUEUE_URL=$(jq -r '.outputs["sqs-canal-de-processamento-url"].value' terraform_infrastructure.json)
+        echo "SQS_QUEUE_URL=$SQS_QUEUE_URL" >> $GITHUB_OUTPUT
+
+    - name: Extract SNS Topic ARN for Status
+      id: sns-status-topic-arn
+      run: | 
+        SNS_STATUS_TOPIC_ARN=$(jq -r '.outputs["sns-status-de-processamento-arn"].value' terraform_infrastructure.json)
+        echo "SNS_STATUS_TOPIC_ARN=$SNS_STATUS_TOPIC_ARN" >> $GITHUB_OUTPUT
+
+    - name: Extract SNS Topic ARN for Error
+      id: sns-error-topic-arn
+      run: | 
+        SNS_ERROR_TOPIC_ARN=$(jq -r '.outputs["sns-falhas-de-processamento-arn"].value' terraform_infrastructure.json)
+        echo "SNS_ERROR_TOPIC_ARN=$SNS_ERROR_TOPIC_ARN" >> $GITHUB_OUTPUT
+
     - name: Update kubeconfig 
       run: |
         aws eks update-kubeconfig --name ${{ steps.extract-cluster-name.outputs.CLUSTER_NAME }} --region ${{ github.event.inputs.aws_region }}
