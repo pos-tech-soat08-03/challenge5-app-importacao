@@ -2,7 +2,7 @@
 
 Projeto do 5º Tech Challenge (Hackaton) - POS TECH 8SOAT - Grupo 03 --> Repositório Importacao de Videos 
 
-Este repositório contém a implementação do Serviço de importacao dos Videos para o Tech Challenge 5 da Pós Tech de Arquitetura de Software (Turma SOAT8) da FIAP. 
+Este repositório contém a implementação do Serviço de Importação dos Videos para o Tech Challenge 5 da Pós Tech de Arquitetura de Software (Turma SOAT8) da FIAP. 
 
 ## ✒️ Grupo / Autores
 
@@ -13,7 +13,7 @@ O Grupo que implementou a solução (Grupo 03), é composto pelos seguintes inte
 - Marcio Saragiotto, marcio.saragiotto@gmail.com, RM357349, @msgiotto
 - Rafael da Silva Andrade, rafaandrade_@outlook.com, RM357010, @andrade_rafael
 
-## Repositório dedicado para Microserviço de Importacao 
+## Repositório dedicado para Microserviço de Importação 
 - Inclui o código da aplicação em Typescript e dependências associadas.
 - Inclui persistência de dados em Banco Relacional MySQL
 - Inclui configurações para execução em containers locais ou Kubernetes
@@ -295,9 +295,9 @@ Contém os casos de uso, responsáveis por executar as regras de negócios da ap
     - `Feature: {NúmeroTask} - {mensagem}` Para implementar funcionalidades
     - `Chore: {NúmeroTask} - {mensagem}` Para alterações que não impactem o uso (débito técnico)
 
-## Arquitetura e Fluxo de Importacao 
+## Arquitetura e Fluxo de Importação 
 
-Nas imagens abaixo, e possivel verificar a arquitetura utilizada no projeto e tambem o fluxo demonstrando o funcionamento do servico de importacao com suas respectivas integracoes. 
+Nas imagens abaixo, e possivel verificar a arquitetura utilizada no projeto e tambem o fluxo demonstrando o funcionamento do servico de importação com suas respectivas integrações. 
 
 ![Exemplo importacao](./docs/exemplo_importacao.JPG)
 
