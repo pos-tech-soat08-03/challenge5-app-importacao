@@ -4,7 +4,7 @@ import { VideoImportEntity } from "../../Core/Entity/VideoImportEntity";
 import { VideoImportInterface } from "../../Core/Interfaces/Gateway/VideoImportInterface";
 import { ProcessingStatusEnum } from "../../Core/Entity/ValueObject/ProcessingStatusEnum";
 import { SNSPublisher } from "../../Infrastructure/SQS_SNS/SNSPublisher";
-import { Axios } from "axios";
+
 
 class VideoProcessingModel extends Model {
   public importId!: string;

@@ -72,6 +72,18 @@ jobs:
         CLUSTER_NAME=$(jq -r '.outputs.jackapp_cluster_name.value' terraform_infrastructure.json)
         echo "CLUSTER_NAME=$CLUSTER_NAME" >> $GITHUB_OUTPUT
 
+    - name: Extract SQS Url for Processing
+      id: sqs-processing
+      run: | 
+        SQS_QUEUE_URL=$(jq -r '.outputs["sqs-canal-de-processamento-url"].value' terraform_infrastructure.json)
+        echo "SQS_QUEUE_URL=$SQS_QUEUE_URL" >> $GITHUB_OUTPUT
+
+    - name: Extract SNS Topic ARN for Status
+      id: sns-status-topic-arn
+      run: | 
+        SNS_STATUS_TOPIC_ARN=$(jq -r '.outputs["sns-status-de-processamento-arn"].value' terraform_infrastructure.json)
+        echo "SNS_STATUS_TOPIC_ARN=$SNS_STATUS_TOPIC_ARN" >> $GITHUB_OUTPUT
+
     - name: Update kubeconfig 
       run: |
         aws eks update-kubeconfig --name ${{ steps.extract-cluster-name.outputs.CLUSTER_NAME }} --region ${{ github.event.inputs.aws_region }}
@@ -79,18 +91,21 @@ jobs:
     - name: Create file jackapp-importacao-configmap.yaml
       working-directory: manifesto_kubernetes/
       run: |
-        cat <<EOF > jackapp-importacao-configmap.yaml
-        apiVersion: v1
-        kind: ConfigMap
-        metadata:
-          name: jackapp-importacao-configmap
-        data:
-          NODE_ENV: development
-          AWS_REGION: "${{ github.event.inputs.aws_region }}"    
-          AWS_SESSION_TOKEN: "${{ github.event.inputs.aws_session_token }}"
-          SQS_QUEUE_URL: "http://sqs.us-east-1.localhost.localstack.cloud:4566/${{ github.event.inputs.aws_account_id }}/sqs-canal-de-processamento"
-          S3_BUCKET_NAME: video-importing-bucket
-        EOF
+          cat <<EOF > jackapp-importacao-configmap.yaml
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+           name: jackapp-importacao-configmap
+          data:
+            AWS_REGION: "${{ github.event.inputs.aws_region }}"
+            AWS_ACCESS_KEY_ID: "${{ github.event.inputs.aws_access_key_id }}"
+            AWS_SECRET_ACCESS_KEY: "${{ github.event.inputs.aws_secret_access_key }}"
+            AWS_SESSION_TOKEN: "${{ github.event.inputs.aws_session_token }}"
+            SNS_STATUS_TOPIC_ARN: "${{ steps.sns-status-topic-arn.outputs.SNS_STATUS_TOPIC_ARN }}"
+            SNS_ERROR_TOPIC_ARN: "${{ steps.sns-error-topic-arn.outputs.SNS_ERROR_TOPIC_ARN }}"
+            SQS_QUEUE_URL: "${{steps.sqs-processing.outputs.SQS_QUEUE_URL}}"
+            S3_BUCKET_NAME: "${{ github.event.inputs.aws_backend_bucket }}"
+          EOF
 
     - name: Deploy in AWS EKS Cluster
       working-directory: manifesto_kubernetes/
@@ -98,18 +113,25 @@ jobs:
         kubectl apply -f jackapp-importacao-configmap.yaml
         kubectl apply -f jackapp-importacao-hpa.yaml
         kubectl apply -f jackapp-importacao-deployment.yaml
+        kubectl apply -f svc-jackapp-importacao.yaml
 
-<<<<<<< HEAD
-    # ⚠️ Atenção: esse step depende de steps anteriores que não existem no workflow.
-    # Você precisa adicionar esses outputs em steps reais de descoberta do load balancer.
-=======
    
->>>>>>> c0a992868abb87a1da9b92b88d655c51d04193bb
+    - name: Obtain Load Balancer Hostname
+      id: get-load-balancer-hostname
+      run: |
+        HOSTNAME=$(kubectl get svc svc-jackapp-importacao -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+        echo "LB_HOSTNAME=$HOSTNAME" >> $GITHUB_OUTPUT
+      
+    - name: Obter Porta do Load Balancer
+      id: get-load-balancer-port
+      run: |
+        PORT=$(kubectl get svc svc-jackapp-importacao -o jsonpath='{.spec.ports[0].port}')
+        echo "LB_PORT=$PORT" >> $GITHUB_OUTPUT
+      
     - name: Export Load Balancer Hostname and Port to S3
       run: |
         echo '{' > jackapp-importacao.json
         echo '  "lb_hostname": "${{ steps.get-load-balancer-hostname.outputs.LB_HOSTNAME }}",' >> jackapp-importacao.json
         echo '  "lb_port": "${{ steps.get-load-balancer-port.outputs.LB_PORT }}"' >> jackapp-importacao.json
         echo '}' >> jackapp-importacao.json
-
         aws s3 cp jackapp-importacao.json s3://${{ github.event.inputs.aws_backend_bucket }}/jackapp-importacao/jackapp-importacao.json
