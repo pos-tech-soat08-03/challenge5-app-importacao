@@ -113,7 +113,7 @@ jobs:
     - name: Obter Porta do Load Balancer
       id: get-load-balancer-port
       run: |
-        PORT=$(kubectl get svc svc-jackapp-inforacao -o jsonpath='{.spec.ports[0].port}')
+        PORT=$(kubectl get svc svc-jackapp-importacao -o jsonpath='{.spec.ports[0].port}')
         echo "LB_PORT=$PORT" >> $GITHUB_OUTPUT
       
     - name: Export Load Balancer Hostname and Port to S3
