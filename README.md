@@ -8,9 +8,9 @@ Este repositório contém a implementação do Serviço de Importação dos Vide
 
 O Grupo que implementou a solução (Grupo 03), é composto pelos seguintes integrantes (nome, email, RM, discord):
 - Bruno Moreira Reis: brbrno@hotmail.com, RM358025, @bruno_m_reis
-- Carlos Henrique de Lima, carlos334lima@gmail.com, RM356875, @carloslima2235 
 - Fernando Gurkievicz, fergkz@gmail.com, RM357072, @goorkz
 - Marcio Saragiotto, marcio.saragiotto@gmail.com, RM357349, @msgiotto
+- Matias Correa Franco de Faria, devmatiascff@gmail.com, RM357411, @matiasf8321
 - Rafael da Silva Andrade, rafaandrade_@outlook.com, RM357010, @andrade_rafael
 
 ## Repositório dedicado para Microserviço de Importação 
