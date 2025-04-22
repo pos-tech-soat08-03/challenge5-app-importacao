@@ -164,6 +164,8 @@ _Caso esteja acessando a aplicação de outro host, favor modificar a URL para o
 
 Para acessar a documentação do Swagger, acessar a url [http://aeb503ec92dcb4cae9d4a2f7b0af1a64-1497002298.us-east-1.elb.amazonaws.com/api-docs/) - você poderá navegar e testar todos os endpoints, com exemplos disponíveis.
 
+![Exemplo importacao](./docs/swagger_doc.JPG)  
+
 _Caso esteja acessando a aplicação de outro host, favor modificar a URL para o endereço correto do seu host._  
 
 
