@@ -101,6 +101,7 @@ jobs:
         kubectl apply -f jackapp-importacao-configmap.yaml
         kubectl apply -f jackapp-importacao-hpa.yaml
         kubectl apply -f jackapp-importacao-deployment.yaml
+        kubectl apply -f svc-jackapp-importacao.yaml
 
    
     - name: Obtain Load Balancer Hostname
