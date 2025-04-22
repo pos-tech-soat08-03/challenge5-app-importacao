@@ -4,7 +4,7 @@ Projeto do 5º Tech Challenge (Hackaton) - POS TECH 8SOAT - Grupo 03 --> Reposit
 
 Este repositório contém a implementação do Serviço de importacao dos Videos para o Tech Challenge 5 da Pós Tech de Arquitetura de Software (Turma SOAT8) da FIAP. 
 
-## Repositório dedicado para Microserviço de Clientes 
+## Repositório dedicado para Microserviço de Importacao 
 - Inclui o código da aplicação em Typescript e dependências associadas.
 - Inclui persistência de dados em Banco Relacional MySQL
 - Inclui configurações para execução em containers locais ou Kubernetes
