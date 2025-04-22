@@ -23,7 +23,7 @@ Repositório das demais aplicacoes no Github:
     - [JackApp-Serverless](https://github.com/pos-tech-soat08-03/challenge5-Jackapp-serverless)
     - [JackApp-Infraestrutura](https://github.com/pos-tech-soat08-03/challenge5-Jackapp-infra)
  
-  📹 Link do Vídeo com a explicação do Tech Challenge 5 [https://youtu.be/g5I3aRwP_5M](https://youtu.be/g5I3aRwP_5M)
+  📹 Link do Vídeo com a explicação do Tech Challenge 5: [https://youtu.be/g5I3aRwP_5M](https://youtu.be/g5I3aRwP_5M)
 
 
 ## Repositório dedicado para Microserviço de Importação 
