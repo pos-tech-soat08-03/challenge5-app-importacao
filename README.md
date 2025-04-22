@@ -49,6 +49,8 @@ O Projeto no SonarCloud pode ser acessado em:
 
 ![Fluxo Sonar](./docs/Cobertura_Sonar.JPG)
 
+![Fluxo Sonar](./docs/image.jpg)
+
 ## Configuração do CI/CD
 
 O repositório possui um workflow de CI/CD configurado com o Github Actions, que realiza a validação e deploy do Microserviço na AWS.
