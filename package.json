@@ -16,7 +16,7 @@
   "author": "Grupo 3 SOAT8",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.782.0",
+    "@aws-sdk/client-s3": "^3.787.0",
     "@aws-sdk/client-sns": "^3.782.0",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@ffprobe-installer/ffprobe": "^2.1.2",
