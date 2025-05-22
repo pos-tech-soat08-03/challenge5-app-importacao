@@ -21,7 +21,7 @@
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@ffprobe-installer/ffprobe": "^2.1.2",
     "aws-sdk": "^2.1692.0",
-    "axios": "^1.8.4",
+    "axios": "^1.9.0",
     "busboy": "^1.6.0",
     "dotenv": "^16.4.7",
     "dotenv-cli": "^7.4.1",
